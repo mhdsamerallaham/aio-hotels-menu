@@ -58,32 +58,32 @@ export default function CustomerHeader({ onOpenConcierge }) {
           />
         </div>
 
-        {/* ── Right Controls ──────────────────────────── */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* ── Right Controls (High-Impact & Large Touch Targets) ──────────────────────────── */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5">
 
-          {/* Hotel Room Service Only */}
+          {/* Hotel Room Service Button */}
           <motion.button
             id="btn-concierge"
             onClick={onOpenConcierge}
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 400, damping: 22 }}
             className="
-              flex items-center gap-1.5
-              px-3 py-2 sm:px-4 sm:py-2.5
+              flex items-center gap-2
+              px-3.5 py-2.5 sm:px-5 sm:py-3
               bg-white hover:bg-[#F8F2F4]
-              text-stone-800 hover:text-[#4A1525]
-              rounded-2xl
-              text-xs font-extrabold font-heading
-              border border-stone-200/90 shadow-xs
+              text-stone-900 hover:text-[#4A1525]
+              rounded-2xl sm:rounded-3xl
+              text-xs sm:text-base font-extrabold font-heading
+              border-2 border-stone-200 shadow-xs
               transition-colors duration-150
               cursor-pointer select-none shrink-0
-              h-11 sm:h-12
+              h-12 sm:h-14
             "
             aria-label={language === 'tr' ? 'Oda Servisi' : 'Room Service'}
           >
-            <BellRing className="w-4 h-4 text-[#4A1525] shrink-0" />
-            <span className="hidden sm:inline whitespace-nowrap">
+            <BellRing className="w-5 h-5 text-[#4A1525] shrink-0" />
+            <span className="inline whitespace-nowrap font-extrabold">
               {language === 'tr' ? 'Oda Servisi' : 'Room Service'}
             </span>
           </motion.button>
@@ -92,28 +92,28 @@ export default function CustomerHeader({ onOpenConcierge }) {
           <motion.button
             id="btn-language-toggle"
             onClick={toggleLanguage}
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 400, damping: 22 }}
             className="
-              flex items-center gap-1.5
-              px-3 py-2 sm:px-3.5 sm:py-2.5
+              flex items-center gap-2
+              px-3.5 py-2.5 sm:px-4 sm:py-3
               bg-stone-900 hover:bg-black
               text-white
-              rounded-2xl
-              text-xs font-black font-heading
+              rounded-2xl sm:rounded-3xl
+              text-xs sm:text-base font-black font-heading
               transition-colors duration-150
               cursor-pointer select-none shrink-0
-              h-11 sm:h-12
+              h-12 sm:h-14
             "
             title="Switch Language / Dili Değiştir"
             aria-label="Switch language"
           >
-            <Languages className="w-4 h-4 text-[#F8F2F4] shrink-0" />
-            <span>{language === 'tr' ? 'TR' : 'EN'}</span>
+            <Languages className="w-5 h-5 text-[#F8F2F4] shrink-0" />
+            <span className="font-black">{language === 'tr' ? 'TR' : 'EN'}</span>
           </motion.button>
 
-          {/* Cart Trigger ─ Prominent Pantone 7421 C button */}
+          {/* Cart Trigger ─ Large Prominent Pantone 7421 C Button */}
           <motion.button
             id="btn-open-cart"
             onClick={openCart}
@@ -121,25 +121,26 @@ export default function CustomerHeader({ onOpenConcierge }) {
             whileTap={{ scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
             className="
-              relative flex items-center gap-2.5
-              px-4 py-2 sm:px-5 sm:py-2.5
+              relative flex items-center gap-2.5 sm:gap-3
+              px-5 py-3 sm:px-7 sm:py-3.5
               bg-[#4A1525] hover:bg-[#360F1B] active:bg-[#2C0D16]
               text-white
-              rounded-2xl
-              text-sm font-extrabold font-heading
-              shadow-md shadow-[#4A1525]/30
-              border border-white/20
+              rounded-2xl sm:rounded-3xl
+              text-sm sm:text-lg font-black font-heading
+              shadow-xl shadow-[#4A1525]/35
+              border-2 border-white/20
               transition-all duration-200
               cursor-pointer select-none shrink-0
-              h-11 sm:h-12
+              h-12 sm:h-14
             "
             aria-label={language === 'tr' ? 'Sepeti Aç' : 'Open Cart'}
+            style={{ color: '#FFFFFF' }}
           >
             <div className="relative flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5 text-white stroke-[2.5] shrink-0" />
+              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white stroke-[2.5] shrink-0" />
             </div>
 
-            <span className="font-extrabold text-white text-sm whitespace-nowrap">
+            <span className="font-black text-white text-sm sm:text-base whitespace-nowrap" style={{ color: '#FFFFFF' }}>
               {language === 'tr' ? 'Sepet' : 'Cart'}
             </span>
 
@@ -154,11 +155,11 @@ export default function CustomerHeader({ onOpenConcierge }) {
                   transition={{ type: 'spring', stiffness: 600, damping: 22 }}
                   className="
                     inline-flex items-center justify-center
-                    min-w-[1.375rem] h-[1.375rem]
+                    min-w-[1.6rem] h-[1.6rem]
                     bg-white text-[#4A1525]
                     rounded-full
-                    text-xs font-black leading-none
-                    px-1.5 shadow-sm
+                    text-xs sm:text-sm font-black leading-none
+                    px-2 shadow-sm border border-stone-200/50
                   "
                   aria-live="polite"
                   aria-label={`${cartCount} items in cart`}

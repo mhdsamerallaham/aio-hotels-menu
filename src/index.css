@@ -214,14 +214,14 @@ h1, h2, h3, h4, h5, h6 {
    ═══════════════════════════════════════════ */
 
 :root {
-  --customer-header-height: 84px;
+  --customer-header-height: 96px;
   --customer-category-height: 92px;
   --customer-total-sticky: calc(var(--customer-header-height) + var(--customer-category-height));
 }
 
 @media (max-width: 640px) {
   :root {
-    --customer-header-height: 72px;
+    --customer-header-height: 84px;
     --customer-category-height: 84px;
   }
 }
