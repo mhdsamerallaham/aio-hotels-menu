@@ -475,48 +475,48 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           </div>
 
           {/* ── STICKY CART FOOTER BAR ── */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-white/95 backdrop-blur-md border-t border-stone-200/90 shadow-2xl flex items-center gap-3.5 z-20">
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-white/95 backdrop-blur-md border-t-2 border-stone-200/90 shadow-2xl flex items-center gap-3 sm:gap-4 z-20">
             
-            {/* Quantity Controls */}
-            <div className="flex items-center gap-2 bg-stone-100 p-1.5 rounded-2xl border border-stone-200/90 shrink-0">
+            {/* Quantity Controls — Extra Large */}
+            <div className="flex items-center gap-2 bg-stone-100 p-2 rounded-2xl border-2 border-stone-200/90 shrink-0">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
+                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer active:scale-95 transition-all"
               >
-                <Minus className="w-4 h-4 stroke-[2.5]" />
+                <Minus className="w-5 h-5 stroke-[2.5]" />
               </button>
-              <span className="w-7 text-center text-base sm:text-lg font-black text-stone-900 font-mono">
+              <span className="w-8 text-center text-lg sm:text-xl font-black text-stone-900 font-mono">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
+                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer active:scale-95 transition-all"
               >
-                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <Plus className="w-5 h-5 stroke-[2.5]" />
               </button>
             </div>
 
-            {/* Primary Action CTA */}
+            {/* Primary Action CTA — Extra Large & High Impact */}
             <button
               onClick={handleAddToCart}
               disabled={isAdded}
-              className={`flex-1 py-4 px-5 sm:px-6 rounded-2xl font-black font-heading text-base sm:text-lg flex items-center justify-between shadow-lg transition-all press-trigger cursor-pointer ${
+              className={`flex-1 py-4.5 sm:py-5 px-6 sm:px-8 rounded-2xl font-black font-heading text-lg sm:text-xl flex items-center justify-between shadow-xl transition-all press-trigger cursor-pointer active:scale-[0.98] ${
                 isAdded
-                  ? 'bg-emerald-600 text-white shadow-emerald-600/20'
-                  : 'bg-[#4A1525] hover:bg-[#360F1B] text-white shadow-[#4A1525]/25'
+                  ? 'bg-emerald-600 text-white shadow-emerald-600/30'
+                  : 'bg-[#4A1525] hover:bg-[#360F1B] text-white shadow-[#4A1525]/30 ring-2 ring-[#4A1525]/15'
               }`}
               style={{ color: '#FFFFFF' }}
             >
-              <div className="flex items-center gap-2.5">
-                <ShoppingBag className="w-5 h-5 text-white" />
-                <span className="font-black" style={{ color: '#FFFFFF' }}>
+              <div className="flex items-center gap-3">
+                <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 text-white stroke-[2.5]" />
+                <span className="font-black tracking-tight" style={{ color: '#FFFFFF' }}>
                   {isAdded ? getTranslation(language, 'addedToCart') : getTranslation(language, 'addToCart')}
                 </span>
               </div>
 
-              <span className="font-mono text-base sm:text-lg font-black text-[#4A1525] bg-white px-3 py-1 rounded-xl shadow-xs">
+              <span className="font-mono text-base sm:text-xl font-black text-[#4A1525] bg-white px-3.5 py-1.5 rounded-xl shadow-md border border-stone-100">
                 ₺{grandTotal}
               </span>
             </button>

@@ -269,20 +269,28 @@ export default function CartDrawer() {
                 </span>
               </div>
 
-              {/* Direct WhatsApp Checkout Button (Disabled when incomplete) */}
+              {/* Direct WhatsApp Checkout Button (Disabled when incomplete) — Extra Large & Bold */}
               <button
                 onClick={handleCheckout}
                 disabled={!isFormValid}
-                className={`w-full py-4 rounded-2xl font-black font-heading text-sm sm:text-base flex items-center justify-center gap-2.5 transition-all ${
+                className={`w-full py-4.5 sm:py-5 px-6 rounded-2xl font-black font-heading text-base sm:text-lg md:text-xl flex items-center justify-between transition-all press-trigger ${
                   isFormValid
-                    ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-lg shadow-emerald-600/25 press-trigger cursor-pointer'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-xl shadow-emerald-600/30 ring-2 ring-emerald-600/20 cursor-pointer active:scale-[0.98]'
                     : 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none border border-stone-300'
                 }`}
                 style={{ color: isFormValid ? '#FFFFFF' : '#A8A29E' }}
               >
-                <Send className="w-5 h-5 shrink-0" />
-                <span>
-                  {getTranslation(language, 'callWaiterOrder')} · ₺{getTotal}
+                <div className="flex items-center gap-3">
+                  <Send className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 stroke-[2.5]" />
+                  <span className="font-black tracking-tight" style={{ color: isFormValid ? '#FFFFFF' : '#A8A29E' }}>
+                    {getTranslation(language, 'callWaiterOrder')}
+                  </span>
+                </div>
+
+                <span className={`font-mono text-base sm:text-lg font-black px-3.5 py-1 rounded-xl shadow-xs ${
+                  isFormValid ? 'bg-emerald-700 text-white border border-emerald-500/40' : 'bg-stone-300 text-stone-500'
+                }`}>
+                  ₺{getTotal}
                 </span>
               </button>
             </div>
