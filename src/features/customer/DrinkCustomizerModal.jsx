@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Check, Plus, Minus, Sparkles, Coffee, Milk, Droplets, Zap, ShoppingBag, Receipt, Info } from 'lucide-react';
+import { X, Check, Plus, Minus, Sparkles, Coffee, Milk, Droplets, Zap, ShoppingBag, Receipt, MessageSquare, Info } from 'lucide-react';
 import useCartStore from '../../store/cartStore';
 import useLanguageStore from '../../store/languageStore';
 import { getLocalizedProduct } from '../../data/menu';
@@ -31,6 +31,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedMilk, setSelectedMilk] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
+  const [notes, setNotes] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -109,6 +110,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
       }
 
       setSelectedExtras([]);
+      setNotes('');
       setQuantity(1);
       setIsAdded(false);
     }
@@ -148,7 +150,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
       combinedExtras.unshift(selectedMilk);
     }
 
-    addToCart(product, selectedSize, combinedExtras, quantity);
+    addToCart(product, selectedSize, combinedExtras, quantity, notes);
     setIsAdded(true);
     setTimeout(() => {
       setIsAdded(false);
@@ -157,11 +159,22 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/75 backdrop-blur-md transition-all duration-300 overflow-y-auto">
-      <div className="bg-white w-full max-w-xl sm:max-w-2xl rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col my-auto border border-stone-200/90 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-stone-950/80 backdrop-blur-md transition-all duration-300 overflow-y-auto">
+      
+      {/* ── Modal Shell: Desktop 2-Column Grid (md:grid-cols-12) & Mobile Vertical Stack ── */}
+      <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden max-h-[94vh] flex flex-col md:grid md:grid-cols-12 my-auto border border-stone-200/90 animate-in fade-in zoom-in-95 duration-200 relative">
 
-        {/* ── 1. Header Banner — Brand Color & Typography Alignment ── */}
-        <div className="relative w-full h-44 sm:h-52 bg-stone-950 shrink-0 overflow-hidden">
+        {/* ── Close Button (Top-Right Fixed in Modal Shell) ── */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md text-white hover:bg-black transition-all cursor-pointer flex items-center justify-center border border-white/20 shadow-md z-30"
+          aria-label="Close modal"
+        >
+          <X className="w-5 h-5 text-white" />
+        </button>
+
+        {/* ── SECTION 1: 9:16 Portrait Product Media Showcase ── */}
+        <div className="md:col-span-5 relative w-full aspect-[9/16] max-h-[460px] md:max-h-none md:h-full bg-stone-950 shrink-0 overflow-hidden">
           <img
             src={localized.image}
             alt={localized.name}
@@ -169,55 +182,42 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           />
 
           {/* Smooth gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent" />
 
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black transition-all cursor-pointer flex items-center justify-center border border-white/20 shadow-md z-10"
-            aria-label="Close modal"
-          >
-            <X className="w-5 h-5 text-white" />
-          </button>
-
-          {/* Title & Brand Base Price Tag */}
-          <div className="absolute bottom-4 left-5 right-5 space-y-1.5 z-10">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-[#4A1525] text-white rounded-full text-xs font-black uppercase tracking-wider border border-white/20">
+          {/* Handcrafted Ritual Badge on Image */}
+          <div className="absolute bottom-5 left-5 right-5 space-y-2 z-10">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#4A1525] text-white rounded-full text-xs font-black uppercase tracking-wider border border-white/20 shadow-md">
               <Sparkles className="w-3.5 h-3.5 text-white" />
               <span style={{ color: '#FFFFFF' }}>{getTranslation(language, 'handcraftedBadge')}</span>
             </span>
-
-            <div className="flex items-end justify-between gap-4">
-              <h2
-                className="text-2xl sm:text-3xl font-black font-heading text-white drop-shadow-md leading-tight"
-                style={{ color: '#FFFFFF' }}
-              >
-                {localized.name}
-              </h2>
-              <span className="text-xl sm:text-2xl font-black text-[#4A1525] bg-white px-3.5 py-1 rounded-xl shadow-md shrink-0">
-                ₺{basePrice}
-              </span>
-            </div>
           </div>
         </div>
 
-        {/* ── 2. Spacious Customization Body with Clean Visual Rhythm ── */}
-        <div className="p-5 sm:p-7 overflow-y-auto custom-scrollbar flex-1 bg-white pb-28 sm:pb-32">
+        {/* ── SECTION 2-8: Scrollable Customization Content Panel ── */}
+        <div className="md:col-span-7 flex flex-col h-full overflow-hidden bg-white">
           
-          {/* Product Description */}
-          <div className="mb-8 pb-6 border-b border-stone-200/80 flex items-start gap-3">
-            <Info className="w-5 h-5 text-[#4A1525] shrink-0 mt-0.5" />
-            <p className="text-sm sm:text-base text-stone-600 font-medium leading-relaxed">
-              {localized.description}
-            </p>
-          </div>
+          {/* Scrollable Container with pb-32 to prevent sticky footer overlap */}
+          <div className="p-6 sm:p-8 overflow-y-auto custom-scrollbar flex-1 pb-32 sm:pb-36">
+            
+            {/* ── SECTION 2: Product Name, Base Price & Description ── */}
+            <div className="space-y-3 pb-6 border-b border-stone-200/80">
+              <div className="flex items-start justify-between gap-4 pr-10">
+                <h2 className="text-2xl sm:text-3xl font-black font-heading text-stone-950 leading-tight">
+                  {localized.name}
+                </h2>
+                <span className="text-xl sm:text-2xl font-black font-mono text-[#4A1525] bg-[#F8F2F4] px-3.5 py-1 rounded-xl border border-[#4A1525]/20 shrink-0">
+                  ₺{basePrice}
+                </span>
+              </div>
 
-          {/* Container with space-y-8 for distinct group rhythm */}
-          <div className="space-y-8">
+              <p className="text-sm sm:text-base text-stone-600 font-medium leading-relaxed">
+                {localized.description}
+              </p>
+            </div>
 
-            {/* ── Section A: Select Size (Boyut Seçimi) ── */}
+            {/* ── SECTION 3: Select Size (Boyut Seçimi) ── */}
             {product.sizes && product.sizes.length > 0 && (
-              <div className="space-y-4">
+              <div className="mt-8 pt-8 border-t border-stone-200/80 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide flex items-center gap-2.5 font-heading">
                     <Coffee className="w-5 h-5 text-[#4A1525]" />
@@ -238,7 +238,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         key={label}
                         type="button"
                         onClick={() => setSelectedSize(size)}
-                        className={`p-4 rounded-2xl border text-center transition-all cursor-pointer press-trigger ${
+                        className={`min-h-[56px] p-4 rounded-2xl border text-center transition-all cursor-pointer press-trigger ${
                           isSelected
                             ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-950 font-black shadow-xs'
                             : 'bg-white text-stone-800 border-stone-200/90 hover:border-stone-400 hover:bg-stone-50/50'
@@ -257,9 +257,9 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
               </div>
             )}
 
-            {/* ── Section B: Select Milk (Süt Seçimi - Single Select Radio) ── */}
+            {/* ── SECTION 4: Select Milk (Süt Seçimi - Single Select Radio) ── */}
             {optionGroups.milks.length > 0 && (
-              <div className="space-y-4 pt-6 border-t border-stone-200/80">
+              <div className="mt-8 pt-8 border-t border-stone-200/80 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide flex items-center gap-2.5 font-heading">
                     <Milk className="w-5 h-5 text-[#4A1525]" />
@@ -270,7 +270,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                   </span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {optionGroups.milks.map((milk) => {
                     const label = getLocalizedLabel(milk, language);
                     const mKey = getMilkKey(milk);
@@ -282,7 +282,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         key={label}
                         type="button"
                         onClick={() => setSelectedMilk(milk)}
-                        className={`w-full p-4 sm:p-4.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                        className={`w-full min-h-[56px] py-4 px-5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                           isSelected
                             ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-950 font-black shadow-xs'
                             : 'bg-white border-stone-200/90 text-stone-800 hover:border-stone-300 hover:bg-stone-50/50'
@@ -310,9 +310,9 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
               </div>
             )}
 
-            {/* ── Section C: Select Syrup (Şurup Seçimi) ── */}
+            {/* ── SECTION 5: Select Syrup (Şurup Seçimi) ── */}
             {optionGroups.syrups.length > 0 && (
-              <div className="space-y-4 pt-6 border-t border-stone-200/80">
+              <div className="mt-8 pt-8 border-t border-stone-200/80 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide flex items-center gap-2.5 font-heading">
                     <Droplets className="w-5 h-5 text-[#4A1525]" />
@@ -323,7 +323,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                   </span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {optionGroups.syrups.map((syrup) => {
                     const label = getLocalizedLabel(syrup, language);
                     const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(syrup, 'tr'));
@@ -333,7 +333,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         key={label}
                         type="button"
                         onClick={() => toggleExtra(syrup)}
-                        className={`w-full p-4 sm:p-4.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                        className={`w-full min-h-[56px] py-4 px-5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                           isChecked
                             ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-950 font-black shadow-xs'
                             : 'bg-white border-stone-200/90 text-stone-800 hover:border-stone-300 hover:bg-stone-50/50'
@@ -361,9 +361,9 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
               </div>
             )}
 
-            {/* ── Section D: Select Extra Shot (Ekstra Shot Seçimi) ── */}
+            {/* ── SECTION 6: Select Extra Shot (Ekstra Shot Seçimi) ── */}
             {optionGroups.shots.length > 0 && (
-              <div className="space-y-4 pt-6 border-t border-stone-200/80">
+              <div className="mt-8 pt-8 border-t border-stone-200/80 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide flex items-center gap-2.5 font-heading">
                     <Zap className="w-5 h-5 text-[#4A1525]" />
@@ -374,7 +374,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                   </span>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   {optionGroups.shots.map((shot) => {
                     const label = getLocalizedLabel(shot, language);
                     const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(shot, 'tr'));
@@ -384,7 +384,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         key={label}
                         type="button"
                         onClick={() => toggleExtra(shot)}
-                        className={`w-full p-4 sm:p-4.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                        className={`w-full min-h-[56px] py-4 px-5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                           isChecked
                             ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-950 font-black shadow-xs'
                             : 'bg-white border-stone-200/90 text-stone-800 hover:border-stone-300 hover:bg-stone-50/50'
@@ -412,58 +412,24 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
               </div>
             )}
 
-            {/* ── Section E: Other Extras (Diğer Ekstralar) ── */}
-            {optionGroups.others.length > 0 && (
-              <div className="space-y-4 pt-6 border-t border-stone-200/80">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide font-heading">
-                    {getTranslation(language, 'selectExtras')}
-                  </h3>
-                  <span className="text-xs font-semibold text-stone-500 bg-stone-100 px-3 py-1 rounded-full border border-stone-200">
-                    {getTranslation(language, 'optionalBadge')}
-                  </span>
-                </div>
+            {/* ── SECTION 7: Product Notes / Special Instructions ── */}
+            <div className="mt-8 pt-8 border-t border-stone-200/80 space-y-3.5">
+              <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wide flex items-center gap-2.5 font-heading">
+                <MessageSquare className="w-5 h-5 text-[#4A1525]" />
+                <span>{getTranslation(language, 'specialNotesTitle')}</span>
+              </h3>
 
-                <div className="space-y-3">
-                  {optionGroups.others.map((extra) => {
-                    const label = getLocalizedLabel(extra, language);
-                    const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(extra, 'tr'));
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder={getTranslation(language, 'specialNotesPlaceholder')}
+                rows={3}
+                className="w-full p-4 rounded-2xl bg-stone-50/80 border border-stone-200/90 text-stone-900 text-sm font-medium focus:outline-none focus:border-[#4A1525] focus:bg-white focus:ring-2 focus:ring-[#4A1525]/15 transition-all resize-none placeholder:text-stone-400"
+              />
+            </div>
 
-                    return (
-                      <button
-                        key={label}
-                        type="button"
-                        onClick={() => toggleExtra(extra)}
-                        className={`w-full p-4 sm:p-4.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
-                          isChecked
-                            ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-950 font-black shadow-xs'
-                            : 'bg-white border-stone-200/90 text-stone-800 hover:border-stone-300 hover:bg-stone-50/50'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                          <div
-                            className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
-                              isChecked
-                                ? 'bg-[#4A1525] border-[#4A1525] text-white'
-                                : 'border-stone-300 bg-white'
-                            }`}
-                          >
-                            {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-white" />}
-                          </div>
-                          <span className="text-sm sm:text-base font-extrabold text-stone-900 leading-snug break-words">{label}</span>
-                        </div>
-                        <span className={`text-xs sm:text-sm font-black shrink-0 ${isChecked ? 'text-[#4A1525]' : 'text-stone-500'}`}>
-                          {extra.price > 0 ? `+₺${extra.price}` : getTranslation(language, 'freeTag')}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* ── Section F: Itemized Price Breakdown Summary ── */}
-            <div className="bg-stone-50 p-5 sm:p-6 rounded-2xl border border-stone-200/90 space-y-3.5">
+            {/* ── SECTION 8: Itemized Price Breakdown Summary ── */}
+            <div className="mt-8 bg-stone-50 p-5 sm:p-6 rounded-2xl border border-stone-200/90 space-y-3.5">
               <div className="flex items-center justify-between border-b border-stone-200/80 pb-3">
                 <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#4A1525] flex items-center gap-2 font-heading">
                   <Receipt className="w-4 h-4 text-[#4A1525]" />
@@ -507,54 +473,55 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
             </div>
 
           </div>
-        </div>
 
-        {/* ── 3. Sticky Action Footer Bar ── */}
-        <div className="p-4 sm:p-5 bg-white border-t border-stone-200/90 shrink-0 flex items-center gap-3.5 shadow-lg">
-          
-          {/* Quantity Controls */}
-          <div className="flex items-center gap-2 bg-stone-100 p-1.5 rounded-2xl border border-stone-200/90 shrink-0">
+          {/* ── STICKY CART FOOTER BAR ── */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-white/95 backdrop-blur-md border-t border-stone-200/90 shadow-2xl flex items-center gap-3.5 z-20">
+            
+            {/* Quantity Controls */}
+            <div className="flex items-center gap-2 bg-stone-100 p-1.5 rounded-2xl border border-stone-200/90 shrink-0">
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
+              >
+                <Minus className="w-4 h-4 stroke-[2.5]" />
+              </button>
+              <span className="w-7 text-center text-base sm:text-lg font-black text-stone-900 font-mono">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => q + 1)}
+                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+              </button>
+            </div>
+
+            {/* Primary Action CTA */}
             <button
-              type="button"
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
+              onClick={handleAddToCart}
+              disabled={isAdded}
+              className={`flex-1 py-4 px-5 sm:px-6 rounded-2xl font-black font-heading text-base sm:text-lg flex items-center justify-between shadow-lg transition-all press-trigger cursor-pointer ${
+                isAdded
+                  ? 'bg-emerald-600 text-white shadow-emerald-600/20'
+                  : 'bg-[#4A1525] hover:bg-[#360F1B] text-white shadow-[#4A1525]/25'
+              }`}
+              style={{ color: '#FFFFFF' }}
             >
-              <Minus className="w-4 h-4 stroke-[2.5]" />
-            </button>
-            <span className="w-7 text-center text-base sm:text-lg font-black text-stone-900 font-mono">
-              {quantity}
-            </span>
-            <button
-              type="button"
-              onClick={() => setQuantity((q) => q + 1)}
-              className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
-            >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
+              <div className="flex items-center gap-2.5">
+                <ShoppingBag className="w-5 h-5 text-white" />
+                <span className="font-black" style={{ color: '#FFFFFF' }}>
+                  {isAdded ? getTranslation(language, 'addedToCart') : getTranslation(language, 'addToCart')}
+                </span>
+              </div>
+
+              <span className="font-mono text-base sm:text-lg font-black text-[#4A1525] bg-white px-3 py-1 rounded-xl shadow-xs">
+                ₺{grandTotal}
+              </span>
             </button>
           </div>
 
-          {/* Primary Action CTA */}
-          <button
-            onClick={handleAddToCart}
-            disabled={isAdded}
-            className={`flex-1 py-4 px-5 sm:px-6 rounded-2xl font-black font-heading text-base sm:text-lg flex items-center justify-between shadow-lg transition-all press-trigger cursor-pointer ${
-              isAdded
-                ? 'bg-emerald-600 text-white shadow-emerald-600/20'
-                : 'bg-[#4A1525] hover:bg-[#360F1B] text-white shadow-[#4A1525]/25'
-            }`}
-            style={{ color: '#FFFFFF' }}
-          >
-            <div className="flex items-center gap-2.5">
-              <ShoppingBag className="w-5 h-5 text-white" />
-              <span className="font-black" style={{ color: '#FFFFFF' }}>
-                {isAdded ? getTranslation(language, 'addedToCart') : getTranslation(language, 'addToCart')}
-              </span>
-            </div>
-
-            <span className="font-mono text-base sm:text-lg font-black text-[#4A1525] bg-white px-3 py-1 rounded-xl shadow-xs">
-              ₺{grandTotal}
-            </span>
-          </button>
         </div>
 
       </div>
