@@ -215,14 +215,14 @@ h1, h2, h3, h4, h5, h6 {
 
 :root {
   --customer-header-height: 84px;
-  --customer-category-height: 60px;
+  --customer-category-height: 74px;
   --customer-total-sticky: calc(var(--customer-header-height) + var(--customer-category-height));
 }
 
 @media (max-width: 640px) {
   :root {
     --customer-header-height: 72px;
-    --customer-category-height: 56px;
+    --customer-category-height: 68px;
   }
 }
 
@@ -277,12 +277,20 @@ h1, h2, h3, h4, h5, h6 {
   position: sticky;
   top: var(--customer-header-height);
   z-index: 40;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(230, 224, 213, 0.65);
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.025);
-  padding: 0.65rem 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(230, 224, 213, 0.8);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.06);
+  padding: 0.75rem 0;
+}
+
+.category-scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
 }
 
 /* ── Cart Badge Bounce Animation ── */
