@@ -5,6 +5,25 @@ import useLanguageStore from '../../store/languageStore';
 import { getLocalizedProduct } from '../../data/menu';
 import { getTranslation } from '../../data/translations';
 
+// Universal bilingual label resolver for options, milks, syrups, shots
+const getLocalizedLabel = (item, lang) => {
+  if (!item) return '';
+
+  // Handle nested object { name: { tr, en } }
+  if (item.name && typeof item.name === 'object') {
+    return item.name[lang] || item.name.en || item.name.tr || '';
+  }
+  // Handle nested string { name: 'Vanilla Syrup' }
+  if (item.name && typeof item.name === 'string') {
+    return item.name;
+  }
+  // Handle direct properties { tr: '...', en: '...' }
+  if (lang === 'en') {
+    return item.en || item.tr || '';
+  }
+  return item.tr || item.en || '';
+};
+
 export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
   const language = useLanguageStore((s) => s.language);
   const addToCart = useCartStore((s) => s.addToCart);
@@ -42,8 +61,9 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
     const others = [];
 
     allExtras.forEach((item) => {
-      const name = typeof item.name === 'object' ? item.name.tr + ' ' + item.name.en : String(item.name);
-      const lower = name.toLowerCase();
+      const nameTr = typeof item.name === 'object' ? item.name.tr : (item.tr || String(item.name || ''));
+      const nameEn = typeof item.name === 'object' ? item.name.en : (item.en || nameTr);
+      const lower = (nameTr + ' ' + nameEn).toLowerCase();
 
       if (lower.includes('süt') || lower.includes('milk')) {
         milks.push(item);
@@ -72,8 +92,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
   // Unique key extractor for milk options
   const getMilkKey = (m) => {
     if (!m) return '';
-    if (typeof m.name === 'object') return m.name.tr || m.name.en || '';
-    return m.tr || m.name || String(m);
+    return getLocalizedLabel(m, 'tr') + '|' + getLocalizedLabel(m, 'en');
   };
 
   useEffect(() => {
@@ -104,9 +123,10 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
 
   const toggleExtra = (extra) => {
     setSelectedExtras((prev) => {
-      const exists = prev.some((e) => e.name === extra.name);
+      const exKey = getLocalizedLabel(extra, 'tr');
+      const exists = prev.some((e) => getLocalizedLabel(e, 'tr') === exKey);
       if (exists) {
-        return prev.filter((e) => e.name !== extra.name);
+        return prev.filter((e) => getLocalizedLabel(e, 'tr') !== exKey);
       } else {
         return [...prev, extra];
       }
@@ -140,17 +160,17 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
       <div className="bg-white w-full max-w-xl sm:max-w-2xl rounded-[28px] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col my-auto border-2 border-stone-900 animate-in fade-in zoom-in-95 duration-200">
 
         {/* ── 1. Hero Aspect Ratio Image Section (9:16 Portrait) ── */}
-        <div className="relative w-full aspect-[9/16] max-h-[40vh] sm:max-h-[340px] bg-stone-950 shrink-0 overflow-hidden border-b-2 border-stone-900">
+        <div className="relative w-full aspect-[9/16] max-h-[38vh] sm:max-h-[320px] bg-stone-950 shrink-0 overflow-hidden border-b-2 border-stone-900">
           <img
             src={localized.image}
             alt={localized.name}
             className="w-full h-full object-cover"
           />
 
-          {/* Heavy gradient overlay for 100% crisp title readability */}
+          {/* Heavy gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-stone-950/95 via-stone-950/55 to-stone-950/20" />
 
-          {/* Retro OS Style Close Button */}
+          {/* Close Button */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 rounded-2xl bg-white text-stone-900 border-2 border-stone-900 flex items-center justify-center hover:bg-[#FFB800] transition-all cursor-pointer shadow-[3px_3px_0px_rgba(0,0,0,1)] z-10"
@@ -175,7 +195,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           </div>
         </div>
 
-        {/* ── 2. Styleguide Customization Body ── */}
+        {/* ── 2. Customization Body — Generous Unclipped Layout ── */}
         <div className="p-6 sm:p-8 space-y-7 overflow-y-auto custom-scrollbar flex-1 bg-[#FAF9F6]">
           
           {/* Description */}
@@ -187,37 +207,39 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           {product.sizes && product.sizes.length > 0 && (
             <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
               <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-sm sm:text-base text-stone-900 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
+                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
                   <Coffee className="w-5 h-5 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectSize')}</span>
                 </h3>
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Zorunlu</span>
+                <span className="text-xs font-black text-stone-900 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                  {language === 'en' ? 'Required' : 'Zorunlu'}
+                </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {product.sizes.map((size) => {
-                  const sizeName = typeof size.name === 'object' ? size.name[language] || size.name.tr : size.name;
-                  const isSelected = selectedSize?.name === size.name;
+                  const label = getLocalizedLabel(size, language);
+                  const isSelected = selectedSize && getLocalizedLabel(selectedSize, 'tr') === getLocalizedLabel(size, 'tr');
 
                   return (
                     <button
-                      key={sizeName}
+                      key={label}
                       type="button"
                       onClick={() => setSelectedSize(size)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 text-center transition-all cursor-pointer press-trigger ${
+                      className={`p-4 rounded-2xl border-2 flex sm:flex-col items-center justify-between sm:justify-center text-left sm:text-center transition-all cursor-pointer press-trigger ${
                         isSelected
                           ? 'bg-[#4A1525] text-white border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-4 ring-[#FFB800]'
                           : 'bg-stone-50 text-stone-900 border-stone-300 hover:border-stone-900 hover:bg-stone-100'
                       }`}
                     >
                       <div
-                        className={`text-xs sm:text-sm font-black font-heading ${isSelected ? '!text-white' : 'text-stone-900'}`}
+                        className={`text-sm sm:text-base font-black font-heading ${isSelected ? '!text-white' : 'text-stone-950'}`}
                         style={isSelected ? { color: '#FFFFFF' } : {}}
                       >
-                        {sizeName}
+                        {label}
                       </div>
-                      <div className={`text-xs mt-1 font-black ${isSelected ? 'text-[#FFB800]' : 'text-stone-500'}`}>
-                        {size.price > 0 ? `+₺${size.price}` : 'Standart'}
+                      <div className={`text-xs sm:text-sm font-black ${isSelected ? 'text-[#FFB800]' : 'text-stone-600'}`}>
+                        {size.price > 0 ? `+₺${size.price}` : (language === 'en' ? 'Standard' : 'Standart')}
                       </div>
                     </button>
                   );
@@ -230,34 +252,36 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           {optionGroups.milks.length > 0 && (
             <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
               <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-sm sm:text-base text-stone-900 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
+                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
                   <Milk className="w-5 h-5 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectMilk')}</span>
                 </h3>
-                <span className="text-xs font-black text-stone-900 bg-[#FFB800] px-3 py-1 rounded-full border border-stone-900">Tek Seçim</span>
+                <span className="text-xs font-black text-stone-950 bg-[#FFB800] px-3 py-1 rounded-full border border-stone-900">
+                  {language === 'en' ? 'Single Select' : 'Tek Seçim'}
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {optionGroups.milks.map((milk) => {
-                  const milkName = typeof milk.name === 'object' ? milk.name[language] || milk.name.tr : (milk.tr || milk.name);
+                  const label = getLocalizedLabel(milk, language);
                   const mKey = getMilkKey(milk);
                   const selKey = getMilkKey(selectedMilk);
                   const isSelected = selKey !== '' && selKey === mKey;
 
                   return (
                     <button
-                      key={milkName}
+                      key={label}
                       type="button"
                       onClick={() => setSelectedMilk(milk)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center justify-between transition-all cursor-pointer ${
+                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
                           : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${
                             isSelected
                               ? 'border-stone-900 bg-[#4A1525]'
                               : 'border-stone-400 bg-white'
@@ -265,10 +289,10 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         >
                           {isSelected && <div className="w-2 h-2 rounded-full bg-[#FFB800]" />}
                         </div>
-                        <span className="text-xs sm:text-sm font-extrabold">{milkName}</span>
+                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
                       </div>
-                      <span className={`text-xs font-black ${isSelected ? 'text-[#4A1525]' : 'text-stone-600'}`}>
-                        {milk.price > 0 ? `+₺${milk.price}` : 'Ücretsiz'}
+                      <span className={`text-xs sm:text-sm font-black shrink-0 ${isSelected ? 'text-[#4A1525]' : 'text-stone-600'}`}>
+                        {milk.price > 0 ? `+₺${milk.price}` : (language === 'en' ? 'Free' : 'Ücretsiz')}
                       </span>
                     </button>
                   );
@@ -281,32 +305,34 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           {optionGroups.syrups.length > 0 && (
             <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
               <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-sm sm:text-base text-stone-900 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
+                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
                   <Droplets className="w-5 h-5 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectSyrup')}</span>
                 </h3>
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">İsteğe Bağlı</span>
+                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                  {language === 'en' ? 'Optional' : 'İsteğe Bağlı'}
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {optionGroups.syrups.map((syrup) => {
-                  const syrupName = typeof syrup.name === 'object' ? syrup.name[language] || syrup.name.tr : syrup.name;
-                  const isChecked = selectedExtras.some((e) => e.name === syrup.name);
+                  const label = getLocalizedLabel(syrup, language);
+                  const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(syrup, 'tr'));
 
                   return (
                     <button
-                      key={syrupName}
+                      key={label}
                       type="button"
                       onClick={() => toggleExtra(syrup)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center justify-between transition-all cursor-pointer ${
+                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
                           ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
                           : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
-                          className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center ${
+                          className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
                               ? 'bg-[#4A1525] border-stone-900 text-white'
                               : 'border-stone-400 bg-white'
@@ -314,9 +340,9 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
                         </div>
-                        <span className="text-xs sm:text-sm font-extrabold">{syrupName}</span>
+                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs font-black text-[#4A1525]">
+                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
                         +₺{syrup.price}
                       </span>
                     </button>
@@ -330,32 +356,34 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           {optionGroups.shots.length > 0 && (
             <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
               <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-sm sm:text-base text-stone-900 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
+                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
                   <Zap className="w-5 h-5 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectShot')}</span>
                 </h3>
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">İsteğe Bağlı</span>
+                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                  {language === 'en' ? 'Optional' : 'İsteğe Bağlı'}
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {optionGroups.shots.map((shot) => {
-                  const shotName = typeof shot.name === 'object' ? shot.name[language] || shot.name.tr : shot.name;
-                  const isChecked = selectedExtras.some((e) => e.name === shot.name);
+                  const label = getLocalizedLabel(shot, language);
+                  const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(shot, 'tr'));
 
                   return (
                     <button
-                      key={shotName}
+                      key={label}
                       type="button"
                       onClick={() => toggleExtra(shot)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center justify-between transition-all cursor-pointer ${
+                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
                           ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
                           : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
-                          className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center ${
+                          className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
                               ? 'bg-[#4A1525] border-stone-900 text-white'
                               : 'border-stone-400 bg-white'
@@ -363,10 +391,10 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
                         </div>
-                        <span className="text-xs sm:text-sm font-extrabold">{shotName}</span>
+                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs font-black text-[#4A1525]">
-                        {shot.price > 0 ? `+₺${shot.price}` : 'Standart'}
+                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
+                        {shot.price > 0 ? `+₺${shot.price}` : (language === 'en' ? 'Standard' : 'Standart')}
                       </span>
                     </button>
                   );
@@ -379,31 +407,33 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           {optionGroups.others.length > 0 && (
             <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
               <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-sm sm:text-base text-stone-900 font-black uppercase tracking-wider font-heading">
+                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider font-heading">
                   {getTranslation(language, 'selectExtras')}
                 </h3>
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Özel İstek</span>
+                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                  {language === 'en' ? 'Customization' : 'Özel İstek'}
+                </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {optionGroups.others.map((extra) => {
-                  const extraName = typeof extra.name === 'object' ? extra.name[language] || extra.name.tr : extra.name;
-                  const isChecked = selectedExtras.some((e) => e.name === extra.name);
+                  const label = getLocalizedLabel(extra, language);
+                  const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(extra, 'tr'));
 
                   return (
                     <button
-                      key={extraName}
+                      key={label}
                       type="button"
                       onClick={() => toggleExtra(extra)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 flex items-center justify-between transition-all cursor-pointer ${
+                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
                           ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
                           : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
-                          className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center ${
+                          className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
                               ? 'bg-[#4A1525] border-stone-900 text-white'
                               : 'border-stone-400 bg-white'
@@ -411,10 +441,10 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                         >
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
                         </div>
-                        <span className="text-xs sm:text-sm font-extrabold">{extraName}</span>
+                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs font-black text-[#4A1525]">
-                        {extra.price > 0 ? `+₺${extra.price}` : 'Ücretsiz'}
+                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
+                        {extra.price > 0 ? `+₺${extra.price}` : (language === 'en' ? 'Free' : 'Ücretsiz')}
                       </span>
                     </button>
                   );
@@ -470,7 +500,7 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
             </div>
 
             {/* Amber Gold Price Pill */}
-            <span className="px-4 py-1.5 bg-[#FFB800] text-stone-950 rounded-xl text-base font-black border-2 border-stone-900 shadow-xs font-mono">
+            <span className="px-4 py-1.5 bg-[#FFB800] text-stone-950 rounded-xl text-base sm:text-lg font-black border-2 border-stone-900 shadow-xs font-mono">
               ₺{totalPrice}
             </span>
           </button>
