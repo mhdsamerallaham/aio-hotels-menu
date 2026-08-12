@@ -156,38 +156,38 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md transition-all duration-300 overflow-y-auto">
-      <div className="bg-white w-full max-w-xl sm:max-w-2xl rounded-[28px] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col my-auto border-2 border-stone-900 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/80 backdrop-blur-md transition-all duration-300 overflow-y-auto">
+      <div className="bg-white w-full max-w-xl sm:max-w-2xl rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col my-auto border border-stone-200/90 animate-in fade-in zoom-in-95 duration-200">
 
-        {/* ── 1. Hero Aspect Ratio Image Section (9:16 Portrait) ── */}
-        <div className="relative w-full aspect-[9/16] max-h-[38vh] sm:max-h-[320px] bg-stone-950 shrink-0 overflow-hidden border-b-2 border-stone-900">
+        {/* ── 1. Compact Sleek Header Banner ── */}
+        <div className="relative w-full h-44 sm:h-52 bg-stone-950 shrink-0 overflow-hidden">
           <img
             src={localized.image}
             alt={localized.name}
             className="w-full h-full object-cover"
           />
 
-          {/* Heavy gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-950/95 via-stone-950/55 to-stone-950/20" />
+          {/* Smooth gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-transparent" />
 
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 rounded-2xl bg-white text-stone-900 border-2 border-stone-900 flex items-center justify-center hover:bg-[#FFB800] transition-all cursor-pointer shadow-[3px_3px_0px_rgba(0,0,0,1)] z-10"
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md text-white hover:bg-black transition-all cursor-pointer flex items-center justify-center border border-white/20 shadow-md z-10"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5 stroke-[2.5]" />
+            <X className="w-5 h-5 text-white" />
           </button>
 
-          {/* Title Overlay with Amber Badge */}
-          <div className="absolute bottom-5 left-5 right-5 space-y-2 z-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#FFB800] text-stone-950 rounded-full text-xs font-black uppercase tracking-wider border-2 border-stone-900 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
-              <Sparkles className="w-3.5 h-3.5 fill-stone-950 text-stone-950" />
-              <span>{getTranslation(language, 'handcraftedBadge')}</span>
+          {/* Title & Badge */}
+          <div className="absolute bottom-4 left-5 right-5 space-y-1.5 z-10">
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 bg-[#4A1525] text-white rounded-full text-xs font-black uppercase tracking-wider border border-white/20">
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span style={{ color: '#FFFFFF' }}>{getTranslation(language, 'handcraftedBadge')}</span>
             </span>
 
             <h2
-              className="text-2xl sm:text-3xl font-black font-heading text-white drop-shadow-md leading-tight tracking-tight"
+              className="text-2xl sm:text-3xl font-black font-heading text-white drop-shadow-md leading-tight"
               style={{ color: '#FFFFFF' }}
             >
               {localized.name}
@@ -195,28 +195,28 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           </div>
         </div>
 
-        {/* ── 2. Customization Body — Generous Unclipped Layout ── */}
-        <div className="p-6 sm:p-8 space-y-7 overflow-y-auto custom-scrollbar flex-1 bg-[#FAF9F6]">
+        {/* ── 2. Spacious Airy Customization Body ── */}
+        <div className="p-5 sm:p-7 space-y-6 overflow-y-auto custom-scrollbar flex-1 bg-white">
           
           {/* Description */}
-          <p className="text-sm sm:text-base text-stone-700 font-semibold border-b-2 border-stone-200 pb-4 leading-relaxed">
+          <p className="text-sm sm:text-base text-stone-600 font-medium pb-2 leading-relaxed border-b border-stone-100">
             {localized.description}
           </p>
 
           {/* ── Section A: Select Size (Boyut Seçimi) ── */}
           {product.sizes && product.sizes.length > 0 && (
-            <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
-                  <Coffee className="w-5 h-5 text-[#4A1525]" />
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base text-stone-900 font-extrabold uppercase tracking-wider flex items-center gap-2 font-heading">
+                  <Coffee className="w-4 h-4 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectSize')}</span>
                 </h3>
-                <span className="text-xs font-black text-stone-900 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                <span className="text-xs font-extrabold text-stone-400 uppercase tracking-wider">
                   {language === 'en' ? 'Required' : 'Zorunlu'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {product.sizes.map((size) => {
                   const label = getLocalizedLabel(size, language);
                   const isSelected = selectedSize && getLocalizedLabel(selectedSize, 'tr') === getLocalizedLabel(size, 'tr');
@@ -226,19 +226,19 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                       key={label}
                       type="button"
                       onClick={() => setSelectedSize(size)}
-                      className={`p-4 rounded-2xl border-2 flex sm:flex-col items-center justify-between sm:justify-center text-left sm:text-center transition-all cursor-pointer press-trigger ${
+                      className={`p-3.5 sm:p-4 rounded-2xl border text-center transition-all cursor-pointer press-trigger ${
                         isSelected
-                          ? 'bg-[#4A1525] text-white border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-4 ring-[#FFB800]'
-                          : 'bg-stone-50 text-stone-900 border-stone-300 hover:border-stone-900 hover:bg-stone-100'
+                          ? 'bg-[#4A1525] text-white border-[#4A1525] shadow-md shadow-[#4A1525]/20 font-bold'
+                          : 'bg-stone-50/80 text-stone-800 border-stone-200/90 hover:border-stone-400 hover:bg-stone-100/70'
                       }`}
                     >
                       <div
-                        className={`text-sm sm:text-base font-black font-heading ${isSelected ? '!text-white' : 'text-stone-950'}`}
+                        className={`text-sm font-black font-heading ${isSelected ? '!text-white' : 'text-stone-900'}`}
                         style={isSelected ? { color: '#FFFFFF' } : {}}
                       >
                         {label}
                       </div>
-                      <div className={`text-xs sm:text-sm font-black ${isSelected ? 'text-[#FFB800]' : 'text-stone-600'}`}>
+                      <div className={`text-xs mt-1 font-bold ${isSelected ? 'text-rose-200' : 'text-stone-500'}`}>
                         {size.price > 0 ? `+₺${size.price}` : (language === 'en' ? 'Standard' : 'Standart')}
                       </div>
                     </button>
@@ -250,18 +250,18 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
 
           {/* ── Section B: Select Milk (Süt Seçimi - Single Select Radio) ── */}
           {optionGroups.milks.length > 0 && (
-            <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
-                  <Milk className="w-5 h-5 text-[#4A1525]" />
+            <div className="space-y-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base text-stone-900 font-extrabold uppercase tracking-wider flex items-center gap-2 font-heading">
+                  <Milk className="w-4 h-4 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectMilk')}</span>
                 </h3>
-                <span className="text-xs font-black text-stone-950 bg-[#FFB800] px-3 py-1 rounded-full border border-stone-900">
+                <span className="text-xs font-bold text-[#4A1525] bg-[#F8F2F4] px-2.5 py-0.5 rounded-full border border-[#4A1525]/20">
                   {language === 'en' ? 'Single Select' : 'Tek Seçim'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="space-y-2">
                 {optionGroups.milks.map((milk) => {
                   const label = getLocalizedLabel(milk, language);
                   const mKey = getMilkKey(milk);
@@ -273,25 +273,25 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                       key={label}
                       type="button"
                       onClick={() => setSelectedMilk(milk)}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
-                          : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
+                          ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-900 font-extrabold shadow-xs'
+                          : 'bg-stone-50/70 border-stone-200/90 text-stone-700 hover:border-stone-300 hover:bg-stone-100/60'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
                           className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${
                             isSelected
-                              ? 'border-stone-900 bg-[#4A1525]'
-                              : 'border-stone-400 bg-white'
+                              ? 'border-[#4A1525] bg-[#4A1525]'
+                              : 'border-stone-300 bg-white'
                           }`}
                         >
-                          {isSelected && <div className="w-2 h-2 rounded-full bg-[#FFB800]" />}
+                          {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
                         </div>
-                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
+                        <span className="text-sm font-extrabold text-stone-900 leading-snug break-words">{label}</span>
                       </div>
-                      <span className={`text-xs sm:text-sm font-black shrink-0 ${isSelected ? 'text-[#4A1525]' : 'text-stone-600'}`}>
+                      <span className={`text-xs font-black shrink-0 ${isSelected ? 'text-[#4A1525]' : 'text-stone-500'}`}>
                         {milk.price > 0 ? `+₺${milk.price}` : (language === 'en' ? 'Free' : 'Ücretsiz')}
                       </span>
                     </button>
@@ -303,18 +303,18 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
 
           {/* ── Section C: Select Syrup (Şurup Seçimi) ── */}
           {optionGroups.syrups.length > 0 && (
-            <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
-                  <Droplets className="w-5 h-5 text-[#4A1525]" />
+            <div className="space-y-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base text-stone-900 font-extrabold uppercase tracking-wider flex items-center gap-2 font-heading">
+                  <Droplets className="w-4 h-4 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectSyrup')}</span>
                 </h3>
-                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                <span className="text-xs font-extrabold text-stone-400 uppercase tracking-wider">
                   {language === 'en' ? 'Optional' : 'İsteğe Bağlı'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="space-y-2">
                 {optionGroups.syrups.map((syrup) => {
                   const label = getLocalizedLabel(syrup, language);
                   const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(syrup, 'tr'));
@@ -324,25 +324,25 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                       key={label}
                       type="button"
                       onClick={() => toggleExtra(syrup)}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
-                          ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
-                          : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
+                          ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-900 font-extrabold shadow-xs'
+                          : 'bg-stone-50/70 border-stone-200/90 text-stone-700 hover:border-stone-300 hover:bg-stone-100/60'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
                           className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
-                              ? 'bg-[#4A1525] border-stone-900 text-white'
-                              : 'border-stone-400 bg-white'
+                              ? 'bg-[#4A1525] border-[#4A1525] text-white'
+                              : 'border-stone-300 bg-white'
                           }`}
                         >
-                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
+                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-white" />}
                         </div>
-                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
+                        <span className="text-sm font-extrabold text-stone-900 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
+                      <span className="text-xs font-black text-[#4A1525] shrink-0">
                         +₺{syrup.price}
                       </span>
                     </button>
@@ -354,18 +354,18 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
 
           {/* ── Section D: Select Extra Shot (Ekstra Shot Seçimi) ── */}
           {optionGroups.shots.length > 0 && (
-            <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider flex items-center gap-2 font-heading">
-                  <Zap className="w-5 h-5 text-[#4A1525]" />
+            <div className="space-y-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base text-stone-900 font-extrabold uppercase tracking-wider flex items-center gap-2 font-heading">
+                  <Zap className="w-4 h-4 text-[#4A1525]" />
                   <span>{getTranslation(language, 'selectShot')}</span>
                 </h3>
-                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                <span className="text-xs font-extrabold text-stone-400 uppercase tracking-wider">
                   {language === 'en' ? 'Optional' : 'İsteğe Bağlı'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="space-y-2">
                 {optionGroups.shots.map((shot) => {
                   const label = getLocalizedLabel(shot, language);
                   const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(shot, 'tr'));
@@ -375,25 +375,25 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                       key={label}
                       type="button"
                       onClick={() => toggleExtra(shot)}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
-                          ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
-                          : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
+                          ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-900 font-extrabold shadow-xs'
+                          : 'bg-stone-50/70 border-stone-200/90 text-stone-700 hover:border-stone-300 hover:bg-stone-100/60'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
                           className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
-                              ? 'bg-[#4A1525] border-stone-900 text-white'
-                              : 'border-stone-400 bg-white'
+                              ? 'bg-[#4A1525] border-[#4A1525] text-white'
+                              : 'border-stone-300 bg-white'
                           }`}
                         >
-                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
+                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-white" />}
                         </div>
-                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
+                        <span className="text-sm font-extrabold text-stone-900 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
+                      <span className="text-xs font-black text-[#4A1525] shrink-0">
                         {shot.price > 0 ? `+₺${shot.price}` : (language === 'en' ? 'Standard' : 'Standart')}
                       </span>
                     </button>
@@ -405,17 +405,17 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
 
           {/* ── Section E: Other Extras (Diğer Ekstralar) ── */}
           {optionGroups.others.length > 0 && (
-            <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-stone-100 pb-3">
-                <h3 className="text-base sm:text-lg text-stone-950 font-black uppercase tracking-wider font-heading">
+            <div className="space-y-3 pt-3 border-t border-stone-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm sm:text-base text-stone-900 font-extrabold uppercase tracking-wider font-heading">
                   {getTranslation(language, 'selectExtras')}
                 </h3>
-                <span className="text-xs font-black text-stone-600 bg-stone-100 px-3 py-1 rounded-full border border-stone-300 uppercase tracking-wider">
+                <span className="text-xs font-extrabold text-stone-400 uppercase tracking-wider">
                   {language === 'en' ? 'Customization' : 'Özel İstek'}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="space-y-2">
                 {optionGroups.others.map((extra) => {
                   const label = getLocalizedLabel(extra, language);
                   const isChecked = selectedExtras.some((e) => getLocalizedLabel(e, 'tr') === getLocalizedLabel(extra, 'tr'));
@@ -425,25 +425,25 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
                       key={label}
                       type="button"
                       onClick={() => toggleExtra(extra)}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
+                      className={`w-full p-3.5 rounded-2xl border flex items-center justify-between text-left gap-3 transition-all cursor-pointer ${
                         isChecked
-                          ? 'bg-[#F8F2F4] border-stone-900 text-stone-950 font-black shadow-[3px_3px_0px_rgba(0,0,0,1)] ring-2 ring-[#FFB800]'
-                          : 'bg-stone-50 border-stone-200 text-stone-800 hover:border-stone-900 hover:bg-stone-100'
+                          ? 'bg-[#F8F2F4] border-2 border-[#4A1525] text-stone-900 font-extrabold shadow-xs'
+                          : 'bg-stone-50/70 border-stone-200/90 text-stone-700 hover:border-stone-300 hover:bg-stone-100/60'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div
                           className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center ${
                             isChecked
-                              ? 'bg-[#4A1525] border-stone-900 text-white'
-                              : 'border-stone-400 bg-white'
+                              ? 'bg-[#4A1525] border-[#4A1525] text-white'
+                              : 'border-stone-300 bg-white'
                           }`}
                         >
-                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-[#FFB800]" />}
+                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3] text-white" />}
                         </div>
-                        <span className="text-sm sm:text-base font-extrabold text-stone-950 leading-snug break-words">{label}</span>
+                        <span className="text-sm font-extrabold text-stone-900 leading-snug break-words">{label}</span>
                       </div>
-                      <span className="text-xs sm:text-sm font-black text-[#4A1525] shrink-0">
+                      <span className="text-xs font-black text-[#4A1525] shrink-0">
                         {extra.price > 0 ? `+₺${extra.price}` : (language === 'en' ? 'Free' : 'Ücretsiz')}
                       </span>
                     </button>
@@ -454,54 +454,47 @@ export default function DrinkCustomizerModal({ product, isOpen, onClose }) {
           )}
 
           {/* ── Section F: Quantity Counter Box ── */}
-          <div className="bg-white p-5 rounded-3xl border-2 border-stone-900 shadow-[3px_3px_0px_rgba(0,0,0,0.08)] flex items-center justify-between">
-            <span className="text-base sm:text-lg text-stone-950 font-black font-heading uppercase tracking-wide">
+          <div className="flex items-center justify-between pt-4 border-t border-stone-100">
+            <span className="text-base sm:text-lg text-stone-900 font-extrabold font-heading">
               {getTranslation(language, 'quantity')}
             </span>
-            <div className="flex items-center gap-3 bg-stone-100 p-2 rounded-2xl border-2 border-stone-900">
+            <div className="flex items-center gap-3 bg-stone-100 p-1.5 rounded-2xl border border-stone-200">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 rounded-xl bg-white text-stone-900 border-2 border-stone-900 flex items-center justify-center font-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-[#FFB800] cursor-pointer transition-all"
+                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
               >
-                <Minus className="w-4 h-4 stroke-[3]" />
+                <Minus className="w-4 h-4 stroke-[2.5]" />
               </button>
-              <span className="w-9 text-center text-xl font-black text-stone-950 font-mono">
+              <span className="w-8 text-center text-lg font-black text-stone-900 font-mono">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 rounded-xl bg-white text-stone-900 border-2 border-stone-900 flex items-center justify-center font-black shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-[#FFB800] cursor-pointer transition-all"
+                className="w-10 h-10 rounded-xl bg-white text-stone-900 flex items-center justify-center font-bold shadow-xs hover:bg-stone-50 cursor-pointer"
               >
-                <Plus className="w-4 h-4 stroke-[3]" />
+                <Plus className="w-4 h-4 stroke-[2.5]" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* ── 3. High-Impact CTA Footer Bar ── */}
-        <div className="p-5 sm:p-6 bg-white border-t-2 border-stone-900 shrink-0">
+        {/* ── 3. Action Button - Full-Width Pantone 7421 C CTA ── */}
+        <div className="p-5 sm:p-6 bg-white border-t border-stone-200/80 shrink-0">
           <button
             onClick={handleAddToCart}
             disabled={isAdded}
-            className={`w-full py-4 sm:py-4.5 rounded-2xl font-black font-heading text-base sm:text-lg flex items-center justify-between px-6 border-2 border-stone-900 shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-all press-trigger cursor-pointer ${
+            className={`w-full py-4 sm:py-4.5 rounded-2xl font-black font-heading text-base sm:text-lg flex items-center justify-center gap-3 shadow-lg transition-all press-trigger cursor-pointer ${
               isAdded
-                ? 'bg-emerald-600 text-white'
-                : 'bg-[#4A1525] hover:bg-[#360F1B] text-white'
+                ? 'bg-emerald-600 text-white shadow-emerald-600/20'
+                : 'bg-[#4A1525] hover:bg-[#360F1B] text-white shadow-[#4A1525]/25'
             }`}
             style={{ color: '#FFFFFF' }}
           >
-            <div className="flex items-center gap-3">
-              <ShoppingBag className="w-6 h-6 text-white stroke-[2.5]" />
-              <span className="font-black" style={{ color: '#FFFFFF' }}>
-                {isAdded ? getTranslation(language, 'addedToCart') : getTranslation(language, 'addToCart')}
-              </span>
-            </div>
-
-            {/* Amber Gold Price Pill */}
-            <span className="px-4 py-1.5 bg-[#FFB800] text-stone-950 rounded-xl text-base sm:text-lg font-black border-2 border-stone-900 shadow-xs font-mono">
-              ₺{totalPrice}
+            <ShoppingBag className="w-5 h-5 text-white" />
+            <span style={{ color: '#FFFFFF' }}>
+              {isAdded ? getTranslation(language, 'addedToCart') : `${getTranslation(language, 'addToCart')} · ₺${totalPrice}`}
             </span>
           </button>
         </div>
