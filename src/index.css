@@ -215,14 +215,14 @@ h1, h2, h3, h4, h5, h6 {
 
 :root {
   --customer-header-height: 84px;
-  --customer-category-height: 74px;
+  --customer-category-height: 92px;
   --customer-total-sticky: calc(var(--customer-header-height) + var(--customer-category-height));
 }
 
 @media (max-width: 640px) {
   :root {
     --customer-header-height: 72px;
-    --customer-category-height: 68px;
+    --customer-category-height: 84px;
   }
 }
 
@@ -271,18 +271,21 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 1px 24px rgba(0, 0, 0, 0.05);
 }
 
-/* ── Customer Sticky Category Nav ── */
+/* ── Customer Sticky Category Nav (High Impact & Noticeable) ── */
 
 .customer-category-nav {
   position: sticky;
   top: var(--customer-header-height);
   z-index: 40;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(230, 224, 213, 0.8);
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.06);
-  padding: 0.75rem 0;
+  height: var(--customer-category-height);
+  background: rgba(253, 251, 248, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 2px solid rgba(74, 21, 37, 0.12);
+  border-top: 1px solid rgba(230, 224, 213, 0.8);
+  box-shadow: 0 6px 25px -4px rgba(74, 21, 37, 0.08);
+  display: flex;
+  items-center: center;
 }
 
 .category-scroll-container {
