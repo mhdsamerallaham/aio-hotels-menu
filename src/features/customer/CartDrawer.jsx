@@ -247,48 +247,52 @@ export default function CartDrawer() {
             )}
           </div>
 
-          {/* Footer Checkout Controls */}
+          {/* Footer Checkout Controls — Giant Hero Button */}
           {items.length > 0 && (
-            <div className="p-5 bg-white border-t border-stone-200/80 space-y-3 shrink-0">
+            <div className="p-5 sm:p-7 bg-white border-t-2 border-stone-200 space-y-4 shrink-0 shadow-2xl">
+              
               {/* Validation Warning Hint */}
               {!isFormValid && (
-                <p className="text-xs text-[#4A1525] font-bold text-center bg-[#F8F2F4] border border-[#4A1525]/20 rounded-xl p-2.5">
-                  ⚠️ {language === 'tr'
-                    ? 'Sipariş vermek için lütfen Otel Adı, Oda Numarası ve Müşteri Adı alanlarını doldurun.'
-                    : 'Please fill in Hotel Name, Room Number, and Customer Name to place your order.'}
-                </p>
+                <div className="p-3.5 bg-rose-50 border-2 border-rose-300 rounded-2xl flex items-center gap-2.5 text-xs sm:text-sm font-black text-rose-950">
+                  <span className="text-lg">⚠️</span>
+                  <span>
+                    {language === 'tr'
+                      ? 'Lütfen Otel Adı, Oda Numarası ve Adınızı doldurun.'
+                      : 'Please fill in Hotel Name, Room Number, and Customer Name.'}
+                  </span>
+                </div>
               )}
 
-              {/* Total Summary */}
-              <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
+              {/* Total Price Summary Row */}
+              <div className="flex items-center justify-between px-2">
+                <span className="text-sm font-black text-stone-500 uppercase tracking-widest font-heading">
                   {getTranslation(language, 'totalPrice')}
                 </span>
-                <span className="text-2xl font-black font-heading text-[#4A1525]">
+                <span className="text-3xl sm:text-4xl font-black font-mono text-[#4A1525]">
                   ₺{getTotal}
                 </span>
               </div>
 
-              {/* Direct WhatsApp Checkout Button (Disabled when incomplete) — Extra Large & Bold */}
+              {/* GIANT HERO WHATSAPP CHECKOUT BUTTON */}
               <button
                 onClick={handleCheckout}
                 disabled={!isFormValid}
-                className={`w-full py-4.5 sm:py-5 px-6 rounded-2xl font-black font-heading text-base sm:text-lg md:text-xl flex items-center justify-between transition-all press-trigger ${
+                className={`w-full py-5 sm:py-6 px-7 sm:px-9 rounded-3xl font-black font-heading text-lg sm:text-xl md:text-2xl flex items-center justify-between transition-all press-trigger ${
                   isFormValid
-                    ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-xl shadow-emerald-600/30 ring-2 ring-emerald-600/20 cursor-pointer active:scale-[0.98]'
-                    : 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none border border-stone-300'
+                    ? 'bg-[#059669] hover:bg-[#047857] active:bg-[#065F46] text-white shadow-2xl shadow-emerald-600/40 ring-4 ring-emerald-500/30 cursor-pointer active:scale-[0.98]'
+                    : 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none border-2 border-stone-300'
                 }`}
-                style={{ color: isFormValid ? '#FFFFFF' : '#A8A29E' }}
+                style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}
               >
-                <div className="flex items-center gap-3">
-                  <Send className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 stroke-[2.5]" />
-                  <span className="font-black tracking-tight" style={{ color: isFormValid ? '#FFFFFF' : '#A8A29E' }}>
+                <div className="flex items-center gap-3.5">
+                  <Send className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 stroke-[2.5] text-white" />
+                  <span className="font-black tracking-tight" style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}>
                     {getTranslation(language, 'callWaiterOrder')}
                   </span>
                 </div>
 
-                <span className={`font-mono text-base sm:text-lg font-black px-3.5 py-1 rounded-xl shadow-xs ${
-                  isFormValid ? 'bg-emerald-700 text-white border border-emerald-500/40' : 'bg-stone-300 text-stone-500'
+                <span className={`font-mono text-lg sm:text-2xl font-black px-4 py-1.5 rounded-2xl shadow-md ${
+                  isFormValid ? 'bg-[#047857] text-white border border-emerald-400/40' : 'bg-stone-300 text-stone-500'
                 }`}>
                   ₺{getTotal}
                 </span>
